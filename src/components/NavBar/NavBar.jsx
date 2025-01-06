@@ -36,11 +36,18 @@ const Navbar = () => {
           <div className="hidden sm:block sm:ml-6">
             <div className="flex space-x-4">
               <NavLink
-                to="/destinations"
+                to="/"
                 className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-400 transition duration-300"
                 activeClassName="bg-purple-700"
               >
-                Destinations
+                Home
+              </NavLink>
+              <NavLink
+                to="/booking"
+                className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-400 transition duration-300"
+                activeClassName="bg-purple-700"
+              >
+                Booking
               </NavLink>
               <NavLink
                 to="/packages"
@@ -48,6 +55,13 @@ const Navbar = () => {
                 activeClassName="bg-purple-700"
               >
                 Packages
+              </NavLink>
+              <NavLink
+                to="/discount"
+                className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-400 transition duration-300"
+                activeClassName="bg-purple-700"
+              >
+                Discount
               </NavLink>
               <NavLink
                 to="/reviews"

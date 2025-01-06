@@ -7,6 +7,9 @@ import ErrorPage from "./components/ErrorPage/ErrorPage";
 import Home from "./components/Home/Home";
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
+import ViewPackage from "./components/ViewPackages/ViewPackages";
+import Booking from "./components/Booking/Booking";
+import Package from "./components/Package/Package";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +28,18 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login></Login>,
+      },
+      {
+        path: "/packages/:id",
+        element: <ViewPackage></ViewPackage>,
+      },
+      {
+        path: "/booking",
+        element: <Booking></Booking>,
+      },
+      {
+        path: "/packages",
+        element: <Package></Package>,
       },
     ],
   },
