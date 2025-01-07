@@ -10,6 +10,7 @@ import Login from "./components/Login/Login";
 import ViewPackage from "./components/ViewPackages/ViewPackages";
 import Booking from "./components/Booking/Booking";
 import Package from "./components/Package/Package";
+import Discount from "./components/Discount/Discount";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/packages",
         element: <Package></Package>,
+      },
+      {
+        path: "/discount-cost",
+        element: <Discount></Discount>,
       },
     ],
   },

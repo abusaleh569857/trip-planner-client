@@ -12,6 +12,8 @@ const Package = () => {
     tour_guide: "Yes",
     room_count: "",
   });
+  const [totalPrice, setTotalPrice] = useState(null); // For storing the total price
+  const [error, setError] = useState(null); // For error handling
 
   // Handle input change
   const handleChange = (e) => {
@@ -27,15 +29,30 @@ const Package = () => {
     e.preventDefault();
 
     try {
+      // Make the API call to create the package
       const response = await axios.post(
         "http://localhost:5000/api/packages",
         formData
       );
       if (response.status === 200) {
         alert("Package added successfully!");
+
+        // After package is created, fetch the total price
+        console.log(response.data);
+        const customId = response.data.custom_id; // assuming the backend returns the custom_id
+        console.log("customId : ", customId);
+        const priceResponse = await axios.get(
+          `http://localhost:5000/calculate-price/${customId}`
+        );
+
+        // Set the total price fetched from backend
+        setTotalPrice(priceResponse.data.total_price);
       }
     } catch (error) {
       console.error("There was an error adding the package!", error);
+      setError(
+        error.response ? error.response.data.error : "An error occurred"
+      );
     }
   };
 
@@ -196,6 +213,20 @@ const Package = () => {
           </div>
         </div>
       </form>
+
+      {/* Display Total Price */}
+      {totalPrice !== null && (
+        <div className="mt-4">
+          <h3 className="text-xl">Total Price: ${totalPrice}</h3>
+        </div>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <div className="mt-4 text-red-500">
+          <p>{error}</p>
+        </div>
+      )}
     </div>
   );
 };
