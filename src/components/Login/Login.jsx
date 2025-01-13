@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const Login = () => {
+  const { loginUser, loading, error, setError } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -15,26 +18,25 @@ const Login = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const result = await loginUser(userData.email, userData.password);
+      console.log(result, " result user : ", result.user);
+      if (result && result.user) {
+        const response = await axios.post(
+          "http://localhost:5000/login",
+          userData,
+          {
+            withCredentials: true, // Allow cookies to be sent with the request
+          }
+        );
 
-      const result = await response.json();
-
-      if (response.ok) {
-        alert("Login successful!");
-
-        navigate("/");
-      } else {
-        alert("Login failed! Please check your credentials.");
+        if (response.status === 200) {
+          alert("Login successful!");
+          navigate("/"); // Redirect to homepage
+        }
       }
     } catch (error) {
-      console.error("Error during form submission:", error);
-      alert("There was an error during login. Please try again later.");
+      console.error("Error during login:", error);
+      alert(error.response?.data?.message || "Login failed. Try again.");
     }
   };
 

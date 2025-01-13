@@ -11,6 +11,12 @@ import ViewPackage from "./components/ViewPackages/ViewPackages";
 import Booking from "./components/Booking/Booking";
 import Package from "./components/Package/Package";
 import Discount from "./components/Discount/Discount";
+import AuthProvider from "./components/Provider/AuthProvider";
+import ProtectedRoute from "./components/Protected/ProtectedRoute";
+import Admin from "./components/Admin/Admin";
+import PrivateRoute from "./components/Private/PrivateRoute";
+import ManagePackages from "./components/ManagePackages/ManagePackages";
+import UpdatePackage from "./components/UpdatePackage/UpdatePackage";
 
 const router = createBrowserRouter([
   {
@@ -32,19 +38,60 @@ const router = createBrowserRouter([
       },
       {
         path: "/packages/:id",
-        element: <ViewPackage></ViewPackage>,
+        element: (
+          <PrivateRoute>
+            <ViewPackage></ViewPackage>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/booking",
-        element: <Booking></Booking>,
+        element: (
+          <PrivateRoute>
+            <Booking></Booking>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/packages",
-        element: <Package></Package>,
+        element: (
+          <PrivateRoute>
+            <Package></Package>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/discount-cost",
-        element: <Discount></Discount>,
+        element: (
+          <PrivateRoute>
+            {" "}
+            <Discount></Discount>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/admin-dashboard",
+        element: (
+          <ProtectedRoute role="admin">
+            <Admin></Admin>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/manage-packages",
+        element: (
+          <ProtectedRoute role="admin">
+            <ManagePackages></ManagePackages>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/update-package/:id",
+        element: (
+          <ProtectedRoute role="admin">
+            <UpdatePackage></UpdatePackage>
+          </ProtectedRoute>
+        ),
       },
     ],
   },
@@ -52,6 +99,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <AuthProvider>
+      <RouterProvider router={router}></RouterProvider>
+    </AuthProvider>
   </StrictMode>
 );

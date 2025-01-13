@@ -217,7 +217,7 @@ const Package = () => {
       {/* Display Total Price */}
       {totalPrice !== null && (
         <div className="mt-4">
-          <h3 className="text-xl">Total Price: ${totalPrice}</h3>
+          <h3 className="text-xl">Total Price: {totalPrice}</h3>
         </div>
       )}
 
