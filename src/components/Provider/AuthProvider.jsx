@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-  updateProfile,
+  // updateProfile,
 } from "firebase/auth";
 import { auth } from "../Firebase/Firebase_init";
 
@@ -61,66 +61,9 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateUserProfile = (updatedData) => {
-    return updateProfile(auth.currentUser, updatedData);
-  };
-
-  //   useEffect(() => {
-  //     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-  //       if (currentUser) {
-  //         try {
-  //           // Fetch additional user data (e.g., role) from the backend
-  //           const response = await axios.get(
-  //             "http://localhost:5000/api/user", // Replace with your backend route
-  //             { withCredentials: true }
-  //           );
-
-  //           const backendUser = response.data;
-  //           console.log(backendUser); // Backend response should include `role`
-  //           setUser({
-  //             ...currentUser,
-  //             role: backendUser.role, // Merge Firebase and backend user data
-  //             photoURL: backendUser.photoURL,
-  //           });
-  //         } catch (error) {
-  //           console.error("Error fetching user data:", error.message);
-  //         }
-  //       } else {
-  //         setUser(null);
-  //       }
-  //       setLoading(false); // Set loading to false after fetching user data
-  //     });
-  //     return () => unsubscribe();
-  //   }, []);
-
-  //   useEffect(() => {
-  //     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-  //       setLoading(true); // Set loading true before fetching user data
-  //       if (currentUser) {
-  //         try {
-  //           // Fetch additional user data (e.g., role) from the backend
-  //           const response = await axios.get(
-  //             "http://localhost:5000/api/user", // Replace with your backend route
-  //             { withCredentials: true }
-  //           );
-
-  //           const backendUser = response.data;
-  //           console.log(backendUser); // Backend response should include `role`
-  //           setUser({
-  //             ...currentUser,
-  //             role: backendUser.role, // Merge Firebase and backend user data
-  //             photoURL: backendUser.photoURL,
-  //           });
-  //         } catch (error) {
-  //           console.error("Error fetching user data:", error.message);
-  //         }
-  //       } else {
-  //         setUser(null);
-  //       }
-  //       setLoading(false); // Set loading to false after fetching user data
-  //     });
-  //     return () => unsubscribe();
-  //   }, []); // Ensure effect runs only once during component mount
+  // const updateUserProfile = (updatedData) => {
+  //   return updateProfile(auth.currentUser, updatedData);
+  // };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -128,7 +71,7 @@ const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           // Add a short delay to ensure session is set up
-          await new Promise((resolve) => setTimeout(resolve, 500)); // 500 ms delay
+          await new Promise((resolve) => setTimeout(resolve, 1000)); // 500 ms delay
           const response = await axios.get("http://localhost:5000/api/user", {
             withCredentials: true,
           });
@@ -156,7 +99,7 @@ const AuthProvider = ({ children }) => {
     registerUser,
     loginUser,
     logout,
-    updateUserProfile,
+    // updateUserProfile,
     setError,
   };
 

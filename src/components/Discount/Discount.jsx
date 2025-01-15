@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Modal from "react-modal";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const DiscountPage = () => {
+  const { user } = useContext(AuthContext);
   const { state } = useLocation(); // Fetching package details from the previous page
   const [travellers, setTravellers] = useState(1);
   const [finalCost, setFinalCost] = useState(0);
@@ -33,13 +35,37 @@ const DiscountPage = () => {
       }
 
       const data = await response.json();
-      console.log("base cost : ", data.baseCost);
-      console.log("final cost : ", data.finalPrice);
-      console.log("discount amount : ", data.discountAmount);
       setBaseCost(data.baseCost);
       setFinalCost(data.finalPrice);
       setDiscountAmount(data.discountAmount);
       setIsModalOpen(true);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleConfirmBooking = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/book-package", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          packageId: packageDetails.id,
+          travellers: travellers,
+          finalCost: finalCost,
+          packageName: packageDetails.name,
+        }),
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to confirm booking");
+      }
+
+      alert("Booking confirmed successfully!");
+      setIsModalOpen(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -132,12 +158,20 @@ const DiscountPage = () => {
               <span className="font-bold text-red-600">{finalCost}</span>
             </p>
 
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="mt-6 w-full py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-colors"
-            >
-              Close
-            </button>
+            <div className="mt-6 flex space-x-4">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="py-2 px-4 bg-gray-300 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-400 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmBooking}
+                className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-colors"
+              >
+                Confirm Booking
+              </button>
+            </div>
           </div>
         </Modal>
       </div>

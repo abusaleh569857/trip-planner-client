@@ -115,6 +115,12 @@ const Navbar = () => {
                       Admin Dashboard
                     </NavLink>
                     <NavLink
+                      to="/add-packages"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-100"
+                    >
+                      Add Packages
+                    </NavLink>
+                    <NavLink
                       to="/manage-packages"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-100"
                     >

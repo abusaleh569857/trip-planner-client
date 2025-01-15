@@ -17,6 +17,8 @@ import Admin from "./components/Admin/Admin";
 import PrivateRoute from "./components/Private/PrivateRoute";
 import ManagePackages from "./components/ManagePackages/ManagePackages";
 import UpdatePackage from "./components/UpdatePackage/UpdatePackage";
+import AddPackages from "./components/Admin/AddPackages";
+import BookingList from "./components/Admin/BookingList";
 
 const router = createBrowserRouter([
   {
@@ -90,6 +92,22 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute role="admin">
             <UpdatePackage></UpdatePackage>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/add-packages",
+        element: (
+          <ProtectedRoute role="admin">
+            <AddPackages></AddPackages>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/booking-list",
+        element: (
+          <ProtectedRoute role="admin">
+            <BookingList></BookingList>
           </ProtectedRoute>
         ),
       },
