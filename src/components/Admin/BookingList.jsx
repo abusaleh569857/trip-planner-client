@@ -5,7 +5,7 @@
 //   const [bookings, setBookings] = useState([]);
 
 //   // Fetch all bookings
-//   useEffect(() => {
+//   const fetchBookings = () => {
 //     fetch("http://localhost:5000/bookings")
 //       .then((res) => res.json())
 //       .then((data) => setBookings(data.bookings || []))
@@ -18,7 +18,91 @@
 //           confirmButtonText: "OK",
 //         });
 //       });
+//   };
+
+//   useEffect(() => {
+//     fetchBookings(); // Fetch bookings on initial load
 //   }, []);
+
+//   // Handle confirming a booking
+//   const handleBookingAction = (bookingId) => {
+//     Swal.fire({
+//       title: "Are you sure?",
+//       text: `Do you want to confirm this booking?`,
+//       icon: "warning",
+//       showCancelButton: true,
+//       confirmButtonText: "Yes, confirm",
+//       cancelButtonText: "No, cancel",
+//     }).then((result) => {
+//       if (result.isConfirmed) {
+//         fetch(`http://localhost:5000/bookings/confirm/${bookingId}`, {
+//           method: "PATCH",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//         })
+//           .then((res) => res.json())
+//           .then(() => {
+//             Swal.fire({
+//               title: "Confirmed!",
+//               text: "Booking has been confirmed.",
+//               icon: "success",
+//               confirmButtonText: "OK",
+//             });
+//             fetchBookings(); // Re-fetch the bookings list after confirming
+//           })
+//           .catch((err) => {
+//             console.error("Error confirming booking:", err);
+//             Swal.fire({
+//               title: "Error",
+//               text: "There was an issue confirming the booking. Please try again later.",
+//               icon: "error",
+//               confirmButtonText: "OK",
+//             });
+//           });
+//       }
+//     });
+//   };
+
+//   // Handle canceling a booking
+//   const handleCancelBooking = (bookingId) => {
+//     Swal.fire({
+//       title: "Are you sure?",
+//       text: `Do you want to cancel this booking?`,
+//       icon: "warning",
+//       showCancelButton: true,
+//       confirmButtonText: "Yes, cancel",
+//       cancelButtonText: "No, keep",
+//     }).then((result) => {
+//       if (result.isConfirmed) {
+//         fetch(`http://localhost:5000/bookings/cancel/${bookingId}`, {
+//           method: "PATCH",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//         })
+//           .then((res) => res.json())
+//           .then(() => {
+//             Swal.fire({
+//               title: "Cancelled!",
+//               text: "Booking has been cancelled.",
+//               icon: "success",
+//               confirmButtonText: "OK",
+//             });
+//             fetchBookings(); // Re-fetch the bookings list after canceling
+//           })
+//           .catch((err) => {
+//             console.error("Error canceling booking:", err);
+//             Swal.fire({
+//               title: "Error",
+//               text: "There was an issue canceling the booking. Please try again later.",
+//               icon: "error",
+//               confirmButtonText: "OK",
+//             });
+//           });
+//       }
+//     });
+//   };
 
 //   return (
 //     <div className="min-h-screen bg-gray-50">
@@ -46,25 +130,38 @@
 //                       <td className="px-6 py-4">{booking.CID}</td>
 //                       <td className="px-6 py-4">{booking.package_name}</td>
 //                       <td className="px-6 py-4">{booking.travellers}</td>
-//                       <td className="px-6 py-4">${booking.total_cost}</td>
+//                       <td className="px-6 py-4">{booking.total_cost}</td>
+//                       <td className="px-6 py-4">{booking.status}</td>
 //                       <td className="px-6 py-4">
-//                         {booking.status ? "Confirmed" : "Pending"}
-//                       </td>
-//                       <td className="px-6 py-4">
-//                         {/* Action Buttons (e.g., confirm, cancel) */}
+//                         {/* Confirm Button */}
 //                         <button
 //                           onClick={() =>
 //                             handleBookingAction(booking.booking_id)
 //                           }
-//                           className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+//                           className={`px-4 py-2 rounded-full hover:bg-blue-700 ${
+//                             booking.status === "Confirmed" ||
+//                             booking.status === "Completed"
+//                               ? "bg-blue-600 text-white opacity-50 cursor-not-allowed"
+//                               : "bg-blue-600 text-white"
+//                           }`}
+//                           disabled={
+//                             booking.status === "Confirmed" ||
+//                             booking.status === "Completed"
+//                           }
 //                         >
 //                           Confirm
 //                         </button>
+//                         {/* Cancel Button */}
 //                         <button
 //                           onClick={() =>
 //                             handleCancelBooking(booking.booking_id)
 //                           }
-//                           className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 ml-2"
+//                           className={`px-4 py-2 rounded-full hover:bg-red-700 ml-2 ${
+//                             booking.status === "Completed"
+//                               ? "bg-red-600 text-white opacity-50 cursor-not-allowed"
+//                               : "bg-red-600 text-white"
+//                           }`}
+//                           disabled={booking.status === "Completed"}
 //                         >
 //                           Cancel
 //                         </button>
@@ -83,96 +180,6 @@
 //   );
 // };
 
-// // Handle confirming a booking
-// const handleBookingAction = (bookingId) => {
-//   Swal.fire({
-//     title: "Are you sure?",
-//     text: `Do you want to confirm this booking?`,
-//     icon: "warning",
-//     showCancelButton: true,
-//     confirmButtonText: "Yes, confirm",
-//     cancelButtonText: "No, cancel",
-//   }).then((result) => {
-//     if (result.isConfirmed) {
-//       fetch(`http://localhost:5000/bookings/confirm/${bookingId}`, {
-//         method: "PATCH",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       })
-//         .then((res) => res.json())
-//         .then((data) => {
-//           Swal.fire({
-//             title: "Confirmed!",
-//             text: "Booking has been confirmed.",
-//             icon: "success",
-//             confirmButtonText: "OK",
-//           });
-//           // Update the bookings state to reflect the confirmed booking
-//           setBookings((prevBookings) =>
-//             prevBookings.map((booking) =>
-//               booking.booking_id === bookingId
-//                 ? { ...booking, status: true }
-//                 : booking
-//             )
-//           );
-//         })
-//         .catch((err) => {
-//           console.error("Error confirming booking:", err);
-//           Swal.fire({
-//             title: "Error",
-//             text: "There was an issue confirming the booking. Please try again later.",
-//             icon: "error",
-//             confirmButtonText: "OK",
-//           });
-//         });
-//     }
-//   });
-// };
-
-// // Handle canceling a booking
-// const handleCancelBooking = (bookingId) => {
-//   Swal.fire({
-//     title: "Are you sure?",
-//     text: `Do you want to cancel this booking?`,
-//     icon: "warning",
-//     showCancelButton: true,
-//     confirmButtonText: "Yes, cancel",
-//     cancelButtonText: "No, keep",
-//   }).then((result) => {
-//     if (result.isConfirmed) {
-//       fetch(`http://localhost:5000/bookings/cancel/${bookingId}`, {
-//         method: "PATCH",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       })
-//         .then((res) => res.json())
-//         .then((data) => {
-//           Swal.fire({
-//             title: "Cancelled!",
-//             text: "Booking has been cancelled.",
-//             icon: "success",
-//             confirmButtonText: "OK",
-//           });
-//           // Update the bookings state to reflect the canceled booking
-//           setBookings((prevBookings) =>
-//             prevBookings.filter((booking) => booking.booking_id !== bookingId)
-//           );
-//         })
-//         .catch((err) => {
-//           console.error("Error canceling booking:", err);
-//           Swal.fire({
-//             title: "Error",
-//             text: "There was an issue canceling the booking. Please try again later.",
-//             icon: "error",
-//             confirmButtonText: "OK",
-//           });
-//         });
-//     }
-//   });
-// };
-
 // export default BookingList;
 
 import React, { useEffect, useState } from "react";
@@ -182,7 +189,7 @@ const BookingList = () => {
   const [bookings, setBookings] = useState([]);
 
   // Fetch all bookings
-  useEffect(() => {
+  const fetchBookings = () => {
     fetch("http://localhost:5000/bookings")
       .then((res) => res.json())
       .then((data) => setBookings(data.bookings || []))
@@ -195,6 +202,10 @@ const BookingList = () => {
           confirmButtonText: "OK",
         });
       });
+  };
+
+  useEffect(() => {
+    fetchBookings(); // Fetch bookings on initial load
   }, []);
 
   // Handle confirming a booking
@@ -215,21 +226,14 @@ const BookingList = () => {
           },
         })
           .then((res) => res.json())
-          .then((data) => {
+          .then(() => {
             Swal.fire({
               title: "Confirmed!",
               text: "Booking has been confirmed.",
               icon: "success",
               confirmButtonText: "OK",
             });
-            // Update the bookings state to reflect the confirmed booking
-            setBookings((prevBookings) =>
-              prevBookings.map((booking) =>
-                booking.booking_id === bookingId
-                  ? { ...booking, status: true }
-                  : booking
-              )
-            );
+            fetchBookings(); // Re-fetch the bookings list after confirming
           })
           .catch((err) => {
             console.error("Error confirming booking:", err);
@@ -262,17 +266,14 @@ const BookingList = () => {
           },
         })
           .then((res) => res.json())
-          .then((data) => {
+          .then(() => {
             Swal.fire({
               title: "Cancelled!",
               text: "Booking has been cancelled.",
               icon: "success",
               confirmButtonText: "OK",
             });
-            // Update the bookings state to reflect the canceled booking
-            setBookings((prevBookings) =>
-              prevBookings.filter((booking) => booking.booking_id !== bookingId)
-            );
+            fetchBookings(); // Re-fetch the bookings list after canceling
           })
           .catch((err) => {
             console.error("Error canceling booking:", err);
@@ -313,25 +314,42 @@ const BookingList = () => {
                       <td className="px-6 py-4">{booking.CID}</td>
                       <td className="px-6 py-4">{booking.package_name}</td>
                       <td className="px-6 py-4">{booking.travellers}</td>
-                      <td className="px-6 py-4">${booking.total_cost}</td>
+                      <td className="px-6 py-4">{booking.total_cost}</td>
+                      <td className="px-6 py-4">{booking.status}</td>
                       <td className="px-6 py-4">
-                        {booking.status ? "Confirmed" : "Pending"}
-                      </td>
-                      <td className="px-6 py-4">
-                        {/* Action Buttons (e.g., confirm, cancel) */}
+                        {/* Confirm Button */}
                         <button
                           onClick={() =>
                             handleBookingAction(booking.booking_id)
                           }
-                          className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+                          className={`px-4 py-2 rounded-full hover:bg-blue-700 ${
+                            ["Confirmed", "Completed", "Cancelled"].includes(
+                              booking.status
+                            )
+                              ? "bg-blue-600 text-white opacity-50 cursor-not-allowed"
+                              : "bg-blue-600 text-white"
+                          }`}
+                          disabled={[
+                            "Confirmed",
+                            "Completed",
+                            "Cancelled",
+                          ].includes(booking.status)}
                         >
                           Confirm
                         </button>
+                        {/* Cancel Button */}
                         <button
                           onClick={() =>
                             handleCancelBooking(booking.booking_id)
                           }
-                          className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 ml-2"
+                          className={`px-4 py-2 rounded-full hover:bg-red-700 ml-2 ${
+                            ["Completed", "Cancelled"].includes(booking.status)
+                              ? "bg-red-600 text-white opacity-50 cursor-not-allowed"
+                              : "bg-red-600 text-white"
+                          }`}
+                          disabled={["Completed", "Cancelled"].includes(
+                            booking.status
+                          )}
                         >
                           Cancel
                         </button>

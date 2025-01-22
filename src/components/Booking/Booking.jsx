@@ -20,7 +20,7 @@ const Booking = () => {
         }
 
         const data = await response.json();
-        console.log(data.bookings);
+        console.log("booking : ", data.bookings);
         setBookings(data.bookings); // Store the bookings data
       } catch (err) {
         setError(err.message); // Handle errors
@@ -37,7 +37,7 @@ const Booking = () => {
           Your Bookings
         </h2>
 
-        {error && <p className="text-red-600 text-center">{error}</p>}
+        {/* {error && <p className="text-red-600 text-center">{error}</p>} */}
 
         {bookings.length > 0 ? (
           <table className="min-w-full table-auto">
@@ -47,7 +47,8 @@ const Booking = () => {
                 <th className="px-4 py-2 text-left">Package Name</th>
                 <th className="px-4 py-2 text-left">Travellers</th>
                 <th className="px-4 py-2 text-left">Total Cost</th>
-                <th className="px-4 py-2 text-left">Booking Date</th>
+                <th className="px-4 py-2 text-left">Status</th>
+                <th className="px-4 py-2 text-left">Booking Request Date</th>
               </tr>
             </thead>
             <tbody>
@@ -57,6 +58,10 @@ const Booking = () => {
                   <td className="px-4 py-2 border">{booking.package_name}</td>
                   <td className="px-4 py-2 border">{booking.travellers}</td>
                   <td className="px-4 py-2 border">{booking.total_cost}</td>
+                  <td className="px-4 py-2 border">{booking.status}</td>
+                  {/* <td className="px-4 py-2 border">
+                    {booking.status === 0 ? "Pending" : "Accepted"}
+                  </td> */}
                   <td className="px-4 py-2 border">
                     {new Date(booking.booking_date).toLocaleString()}
                   </td>

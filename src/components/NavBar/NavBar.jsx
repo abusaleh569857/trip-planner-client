@@ -82,13 +82,13 @@ const Navbar = () => {
             >
               Packages
             </NavLink>
-            <NavLink
+            {/* <NavLink
               to="/discount"
               className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-400 transition duration-300"
               activeClassName="bg-purple-700"
             >
               Discount
-            </NavLink>
+            </NavLink> */}
             <NavLink
               to="/reviews"
               className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-400 transition duration-300"

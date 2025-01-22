@@ -19,6 +19,8 @@ import ManagePackages from "./components/ManagePackages/ManagePackages";
 import UpdatePackage from "./components/UpdatePackage/UpdatePackage";
 import AddPackages from "./components/Admin/AddPackages";
 import BookingList from "./components/Admin/BookingList";
+import Review from "./components/Review/Review";
+import ManageUsers from "./components/Admin/ManageUsers";
 
 const router = createBrowserRouter([
   {
@@ -72,6 +74,15 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/reviews",
+        element: (
+          <PrivateRoute>
+            {" "}
+            <Review></Review>
+          </PrivateRoute>
+        ),
+      },
+      {
         path: "/admin-dashboard",
         element: (
           <ProtectedRoute role="admin">
@@ -108,6 +119,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute role="admin">
             <BookingList></BookingList>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/manage-users",
+        element: (
+          <ProtectedRoute role="admin">
+            <ManageUsers></ManageUsers>
           </ProtectedRoute>
         ),
       },

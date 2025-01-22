@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Modal from "react-modal";
 import { AuthContext } from "../Provider/AuthProvider";
 
-const DiscountPage = () => {
+const Discount = () => {
   const { user } = useContext(AuthContext);
   const { state } = useLocation(); // Fetching package details from the previous page
   const [travellers, setTravellers] = useState(1);
@@ -179,4 +179,4 @@ const DiscountPage = () => {
   );
 };
 
-export default DiscountPage;
+export default Discount;

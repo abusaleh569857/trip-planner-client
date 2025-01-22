@@ -71,7 +71,7 @@ const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           // Add a short delay to ensure session is set up
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // 500 ms delay
+          await new Promise((resolve) => setTimeout(resolve, 500)); // 500 ms delay
           const response = await axios.get("http://localhost:5000/api/user", {
             withCredentials: true,
           });
