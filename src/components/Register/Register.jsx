@@ -69,7 +69,7 @@ const Register = () => {
           body: JSON.stringify(formData),
         });
         alert("Registration successful!");
-        navigate("/"); // Redirect to Home page
+        navigate("/login"); // Redirect to Home page
       }
     } catch (err) {
       console.error("Error during registration:", err.message);

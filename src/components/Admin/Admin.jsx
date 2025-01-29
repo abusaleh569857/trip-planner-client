@@ -80,11 +80,11 @@ const Admin = () => {
   const pieData = [
     { name: "Total Users", value: stats.totalUsers },
     { name: "Total Packages", value: stats.totalPackages },
-    {
-      name: "Top Destinations",
-      value: barStats.topDestinations.count,
-      label: `${barStats.topDestinations.tripPlace} (${barStats.topDestinations.count} trips)`,
-    },
+    // {
+    //   name: "Most Packages",
+    //   value: barStats.topDestinations.count,
+    //   label: `${barStats.topDestinations.tripPlace} (${barStats.topDestinations.count} packages)`,
+    // },
     { name: "Bookings (7 Days)", value: barStats.bookingsLast7Days },
     { name: "Confirmed Packages", value: stats.confirmedPackages },
     { name: "Pending Packages", value: stats.pendingPackages },

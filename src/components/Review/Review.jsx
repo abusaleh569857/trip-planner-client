@@ -40,6 +40,7 @@ const Review = () => {
           withCredentials: true,
         });
         setReviews(response.data.reviews);
+        console.log(response.data.reviews); // Check the date format here
       } catch (err) {
         console.error("Failed to fetch reviews:", err);
       }
@@ -86,8 +87,9 @@ const Review = () => {
         closeModal();
       })
       .catch((err) => {
-        console.error("Error submitting review:", err);
-        Swal.fire("Error", "Failed to submit the review.", "error");
+        const errorMessage =
+          err.response?.data?.error || "Failed to submit the review.";
+        Swal.fire("Error", errorMessage, "error");
       });
   };
 
@@ -228,42 +230,55 @@ const Review = () => {
         {reviews.length === 0 ? (
           <p className="text-center text-lg">No reviews available.</p>
         ) : (
-          <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
-            <table className="min-w-full bg-white border">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-6 py-3 border text-center">
-                    Reviewer Name
-                  </th>
-                  <th className="px-6 py-3 border text-center">Package Name</th>
-                  <th className="px-6 py-3 border text-center">Route</th>
-                  <th className="px-6 py-3 border text-center">Review</th>
-                  <th className="px-6 py-3 border text-center">Rating</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reviews.map((review) => (
-                  <tr key={review.id} className="text-center">
-                    <td className="px-6 py-4 border">{review.reviewer_name}</td>
-                    <td className="px-6 py-4 border text-blue-600 font-semibold hover:underline cursor-pointer">
-                      {review.package_name}
-                    </td>
-                    <td className="px-6 py-4 border">
-                      {review.startLocation} to {review.tripPlace}
-                    </td>
-                    <td className="px-6 py-4 border">{review.review_text}</td>
-                    <td className="px-6 py-4 border">
-                      <Rating
-                        initialRating={review.ratings}
-                        readonly
-                        emptySymbol="far fa-star text-gray-300 text-2xl"
-                        fullSymbol="fas fa-star text-yellow-500 text-2xl"
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {reviews.map((review) => (
+              <div
+                key={review.id}
+                className="bg-white rounded-lg shadow-lg p-6 border hover:shadow-xl transition-shadow duration-300"
+              >
+                {/* Reviewer Profile */}
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-xl font-bold text-gray-700">
+                    {review.reviewer_name[0]}
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {review.reviewer_name}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      Reviewed:
+                      {new Date(review.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Review Content */}
+                <div className="mb-4">
+                  <h4 className="text-blue-600 font-semibold text-lg mb-1">
+                    {review.package_name}
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    Route: {review.startLocation} to {review.tripPlace}
+                  </p>
+                </div>
+
+                {/* Review Text */}
+                <p className="text-gray-800 mb-4">{review.review_text}</p>
+
+                {/* Rating */}
+                <div className="flex items-center">
+                  <Rating
+                    initialRating={review.ratings}
+                    readonly
+                    emptySymbol="far fa-star text-gray-300 text-xl"
+                    fullSymbol="fas fa-star text-yellow-500 text-xl"
+                  />
+                  <span className="ml-2 text-gray-600 text-sm">
+                    {review.ratings.toFixed(1)} / 5
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
